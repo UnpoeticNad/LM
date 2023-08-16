@@ -7,7 +7,7 @@ export default class Info extends Command {
     super(client, {
       name: 'info',
       description: {
-        content: 'Ingormation about the bot',
+        content: 'Information about the bot',
         examples: ['info'],
         usage: 'info',
       },
@@ -33,7 +33,6 @@ export default class Info extends Command {
   public async run(client: Lavamusic, ctx: Context, args: string[]): Promise<void> {
     const osType = os.type();
     const osRelease = os.release();
-    const osUptime = os.uptime();
     const osHostname = os.hostname();
     const cpuArch = os.arch();
     const cpuCores = os.cpus().length;
@@ -46,10 +45,11 @@ export default class Info extends Command {
     const botChannels = client.channels.cache.size;
     const botUsers = client.users.cache.size;
     const botCommands = client.commands.size;
+    const uptime = process.uptime();
+    const botUptime = `${Math.floor(uptime / 86400)}d ${Math.floor(uptime % 86400 / 3600)}h ${Math.floor(uptime % 3600 / 60)}m ${Math.floor(uptime % 60)}s`;
 
     const botInfo = `Bot Information:
 - **Operating System**: ${osType} ${osRelease}
-- **Uptime**: ${client.utils.formatTime(osUptime)}
 - **Hostname**: ${osHostname}
 - **CPU Architecture**: ${cpuArch} (${cpuCores} cores)
 - **Memory Usage**: ${client.utils.formatBytes(usedMem)} / ${client.utils.formatBytes(totalMem)} (${Math.round(
@@ -59,6 +59,7 @@ export default class Info extends Command {
 - **Discord.js Version**: ${discordJsVersion}
 - **Connected to** ${botGuilds} guilds, ${botChannels} channels, and ${botUsers} users
 - **Total Commands**: ${botCommands}
+- **Bot Uptime**: ${botUptime}
   `;
 
     const embed = this.client.embed();
@@ -66,14 +67,4 @@ export default class Info extends Command {
       embeds: [embed.setColor(this.client.color.main).setDescription(botInfo)],
     });
   }
-}
-
-/**
- * Project: lavamusic
- * Author: Blacky
- * Company: Coders
- * Copyright (c) 2023. All rights reserved.
- * This code is the property of Coder and may not be reproduced or
- * modified without permission. For more information, contact us at
- * https://discord.gg/ns8CTk9J3e
- */
+  }
